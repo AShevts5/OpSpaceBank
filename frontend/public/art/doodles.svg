@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" font-family="Onest, Arial, sans-serif" font-weight="700">
+<circle cx="50" cy="50" r="22"/><text x="50" y="59" font-size="24" fill="#FFFFFF" stroke="none" text-anchor="middle">₽</text>
+<text x="170" y="60" font-size="40" fill="#FFFFFF" stroke="none">∧</text>
+<text x="290" y="80" font-size="40" fill="#FFFFFF" stroke="none">∨</text>
+<path d="M240 150 l20 -20 l20 20 l20 -20"/>
+<text x="60" y="190" font-size="38" fill="#FFFFFF" stroke="none">%</text>
+<rect x="140" y="160" width="60" height="40" rx="6"/><line x1="140" y1="172" x2="200" y2="172"/>
+<text x="300" y="230" font-size="38" fill="#FFFFFF" stroke="none">¬</text>
+<path d="M30 300 l25 -30 l20 15 l30 -40"/><path d="M95 245 h10 v10"/>
+<circle cx="200" cy="290" r="16"/><circle cx="216" cy="276" r="16"/>
+<text x="280" y="320" font-size="28" fill="#FFFFFF" stroke="none">1 0</text>
+</svg>

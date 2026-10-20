@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" role="img" aria-labelledby="t">
+<title id="t">Светлый операционный зал банка: окна-арки, колонны, кассы, табло очереди и стойка консультанта (иллюстрация)</title>
+<defs>
+<linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DDF4E8"/><stop offset="1" stop-color="#F3FBF6"/></linearGradient>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7FD3B0"/><stop offset=".6" stop-color="#BDEBD6"/><stop offset="1" stop-color="#EAF9F1"/></linearGradient>
+<linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EFE6D3"/><stop offset="1" stop-color="#E2D3B5"/></linearGradient>
+<linearGradient id="col" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#D3E7DB"/><stop offset=".4" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C2DACB"/></linearGradient>
+<linearGradient id="counter" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1FA672"/><stop offset="1" stop-color="#0E6B4A"/></linearGradient>
+<linearGradient id="carpet" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1FA672"/><stop offset="1" stop-color="#0A5139"/></linearGradient>
+<radialGradient id="sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFF2B8"/><stop offset=".55" stop-color="#FFD966" stop-opacity=".85"/><stop offset="1" stop-color="#FFD966" stop-opacity="0"/></radialGradient>
+<pattern id="dots" width="34" height="34" patternUnits="userSpaceOnUse"><circle cx="17" cy="17" r="1.6" fill="#9CCFB6" opacity=".55"/></pattern>
+<pattern id="tiles" width="120" height="60" patternUnits="userSpaceOnUse"><path d="M0 0H120M0 0V60M60 0V60" stroke="#D5C39E" stroke-width="2" opacity=".6"/></pattern>
+</defs>
+
+<!-- стены и потолок -->
+<rect width="1600" height="760" fill="url(#wall)"/>
+<rect width="1600" height="760" fill="url(#dots)"/>
+<rect width="1600" height="70" fill="#C7EBD8"/>
+<rect y="70" width="1600" height="10" fill="#B2E0C7"/>
+<!-- карниз с монетками-гирляндой -->
+<path d="M0 96 Q200 150 400 96" fill="none" stroke="#3E8C6E" stroke-width="3"/>
+<g fill="#F2C14E" stroke="#B9831F" stroke-width="2"><circle cx="80" cy="120" r="13"/><circle cx="160" cy="132" r="13"/><circle cx="240" cy="134" r="13"/><circle cx="320" cy="124" r="13"/></g>
+<g font-family="Onest, Arial, sans-serif" font-size="14" font-weight="800" fill="#8A5A12" text-anchor="middle"><text x="80" y="125">∧</text><text x="160" y="137">∨</text><text x="240" y="139">¬</text><text x="320" y="129">→</text></g>
+
+<!-- окна-арки -->
+<g>
+<rect x="560" y="150" width="300" height="560" rx="150" fill="#FFFFFF"/>
+<rect x="580" y="170" width="260" height="540" rx="130" fill="url(#sky)"/>
+<circle cx="760" cy="300" r="120" fill="url(#sun)"/>
+<g fill="#FFFFFF" opacity=".9"><ellipse cx="660" cy="320" rx="56" ry="20"/><ellipse cx="700" cy="306" rx="40" ry="22"/><ellipse cx="760" cy="470" rx="60" ry="16"/></g>
+<rect x="705" y="170" width="10" height="540" fill="#FFFFFF"/><rect x="580" y="430" width="260" height="10" fill="#FFFFFF"/><rect x="580" y="580" width="260" height="10" fill="#FFFFFF"/>
+<path d="M640 380 q10 -10 20 0 q10 -10 20 0" fill="none" stroke="#0E6B4A" stroke-width="3"/>
+</g>
+<g>
+<rect x="1200" y="210" width="220" height="460" rx="110" fill="#FFFFFF"/>
+<rect x="1216" y="226" width="188" height="444" rx="94" fill="url(#sky)"/>
+<rect x="1305" y="226" width="10" height="444" fill="#FFFFFF"/><rect x="1216" y="440" width="188" height="10" fill="#FFFFFF"/>
+<g fill="#FFFFFF" opacity=".9"><ellipse cx="1270" cy="330" rx="40" ry="14"/></g>
+</g>
+
+<!-- колонны -->
+<g>
+<rect x="470" y="80" width="60" height="680" fill="url(#col)"/><rect x="460" y="80" width="80" height="24" fill="#F5FBF7"/><rect x="460" y="736" width="80" height="24" fill="#E3F1E8"/>
+<rect x="1060" y="80" width="60" height="680" fill="url(#col)"/><rect x="1050" y="80" width="80" height="24" fill="#F5FBF7"/><rect x="1050" y="736" width="80" height="24" fill="#E3F1E8"/>
+<rect x="1500" y="80" width="60" height="680" fill="url(#col)"/><rect x="1490" y="80" width="80" height="24" fill="#F5FBF7"/><rect x="1490" y="736" width="80" height="24" fill="#E3F1E8"/>
+</g>
+
+<!-- табло приветствия -->
+<line x1="890" y1="80" x2="890" y2="130" stroke="#3E8C6E" stroke-width="3"/><line x1="1170" y1="80" x2="1170" y2="130" stroke="#3E8C6E" stroke-width="3"/>
+<rect x="830" y="128" width="400" height="62" rx="31" fill="#0E6B4A"/>
+<rect x="838" y="136" width="384" height="46" rx="23" fill="none" stroke="#7BDDB0" stroke-width="2"/>
+<text x="1030" y="168" font-family="Onest, Arial, sans-serif" font-size="23" font-weight="800" fill="#FFFFFF" text-anchor="middle" letter-spacing="2">ДОБРО ПОЖАЛОВАТЬ!</text>
+<path d="M1240 140 l5 14 l14 5 l-14 5 l-5 14 l-5 -14 l-14 -5 l14 -5z" fill="#F2C14E"/>
+
+<!-- табло очереди -->
+<rect x="880" y="250" width="160" height="150" rx="12" fill="#063A2A"/>
+<text x="960" y="282" font-family="Onest, Arial, sans-serif" font-size="15" font-weight="700" fill="#7BDDB0" text-anchor="middle" letter-spacing="2">ОЧЕРЕДЬ</text>
+<g font-family="JetBrains Mono, monospace" font-size="17" font-weight="700">
+<text x="900" y="316" fill="#FFFFFF">Т1</text><text x="1020" y="316" fill="#F2C14E" text-anchor="end">→ 1</text>
+<text x="900" y="346" fill="#FFFFFF">Т2</text><text x="1020" y="346" fill="#F2C14E" text-anchor="end">→ 2</text>
+<text x="900" y="376" fill="#FFFFFF">Т3</text><text x="1020" y="376" fill="#F2C14E" text-anchor="end">→ 3</text>
+</g>
+
+<!-- кассы справа -->
+<g>
+<rect x="1130" y="520" width="370" height="240" fill="url(#counter)"/>
+<rect x="1120" y="508" width="390" height="18" rx="4" fill="#F5FBF7"/>
+<g fill="#E8F7EF" opacity=".9"><rect x="1150" y="400" width="100" height="108" rx="8"/><rect x="1265" y="400" width="100" height="108" rx="8"/><rect x="1380" y="400" width="100" height="108" rx="8"/></g>
+<g stroke="#9CCFB6" stroke-width="3" fill="none"><rect x="1150" y="400" width="100" height="108" rx="8"/><rect x="1265" y="400" width="100" height="108" rx="8"/><rect x="1380" y="400" width="100" height="108" rx="8"/></g>
+<g fill="#F2C14E"><circle cx="1200" cy="380" r="16"/><circle cx="1315" cy="380" r="16"/><circle cx="1430" cy="380" r="16"/></g>
+<g font-family="Onest, Arial, sans-serif" font-size="18" font-weight="800" fill="#063A2A" text-anchor="middle"><text x="1200" y="386">1</text><text x="1315" y="386">2</text><text x="1430" y="386">3</text></g>
+<g fill="#FFFFFF" opacity=".25"><rect x="1150" y="560" width="100" height="160" rx="8"/><rect x="1265" y="560" width="100" height="160" rx="8"/><rect x="1380" y="560" width="100" height="160" rx="8"/></g>
+</g>
+
+<!-- стойка консультанта -->
+<g>
+<rect x="1240" y="610" width="220" height="150" rx="20" fill="#F5FBF7" stroke="#B2E0C7" stroke-width="3"/>
+<rect x="1240" y="610" width="220" height="26" rx="13" fill="#13875C"/>
+<rect x="1290" y="660" width="120" height="36" rx="18" fill="#FFFFFF" stroke="#13875C" stroke-width="2"/>
+<text x="1350" y="684" font-family="Onest, Arial, sans-serif" font-size="16" font-weight="700" fill="#0E6B4A" text-anchor="middle">Консультант</text>
+<rect x="1330" y="572" width="40" height="40" rx="8" fill="#1FA672"/><circle cx="1350" cy="560" r="14" fill="#7BDDB0"/>
+</g>
+
+<!-- растения -->
+<g>
+<path d="M150 760 l12 -90 h76 l12 90z" fill="#F5FBF7" stroke="#B2E0C7" stroke-width="3"/>
+<g fill="#1F7A57"><ellipse cx="200" cy="600" rx="22" ry="70" transform="rotate(-22 200 640)"/><ellipse cx="200" cy="600" rx="22" ry="70" transform="rotate(18 200 640)"/><ellipse cx="200" cy="590" rx="20" ry="78"/></g>
+<g fill="#3CC48C" opacity=".8"><ellipse cx="200" cy="610" rx="14" ry="50" transform="rotate(-40 200 640)"/><ellipse cx="200" cy="610" rx="14" ry="50" transform="rotate(40 200 640)"/></g>
+</g>
+<g>
+<path d="M940 760 l10 -70 h60 l10 70z" fill="#F5FBF7" stroke="#B2E0C7" stroke-width="3"/>
+<g fill="#1F7A57"><ellipse cx="980" cy="640" rx="18" ry="54" transform="rotate(-20 980 670)"/><ellipse cx="980" cy="640" rx="18" ry="54" transform="rotate(20 980 670)"/><ellipse cx="980" cy="630" rx="16" ry="60"/></g>
+</g>
+
+<!-- пол -->
+<rect y="760" width="1600" height="240" fill="url(#floor)"/>
+<rect y="760" width="1600" height="240" fill="url(#tiles)"/>
+<rect y="756" width="1600" height="8" fill="#CDBB94"/>
+<!-- ковёр -->
+<ellipse cx="420" cy="900" rx="330" ry="70" fill="url(#carpet)"/>
+<ellipse cx="420" cy="900" rx="300" ry="56" fill="none" stroke="#B4EDD1" stroke-width="3" stroke-dasharray="12 10"/>
+<path d="M420 880 l8 16 l18 4 l-18 4 l-8 16 l-8 -16 l-18 -4 l18 -4z" fill="#F2C14E"/>
+<!-- искорки -->
+<g fill="#F2C14E"><path d="M380 230 l4 12 l12 4 l-12 4 l-4 12 l-4 -12 l-12 -4 l12 -4z"/><path d="M1150 260 l3 9 l9 3 l-9 3 l-3 9 l-3 -9 l-9 -3 l9 -3z"/></g>
+</svg>

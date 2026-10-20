@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-labelledby="t">
+<title id="t">Здание банка с колоннами вечером (условная иллюстрация)</title>
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#03241A"/><stop offset=".42" stop-color="#0B4A3A"/><stop offset=".72" stop-color="#3E8C6E"/><stop offset=".9" stop-color="#E9C77B"/><stop offset="1" stop-color="#F5DFA0"/></linearGradient>
+<radialGradient id="moon" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFF6D6"/><stop offset=".6" stop-color="#FCEBB0"/><stop offset="1" stop-color="#FCEBB0" stop-opacity="0"/></radialGradient>
+<linearGradient id="stone" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E9F1EA"/><stop offset=".55" stop-color="#F6FAF4"/><stop offset="1" stop-color="#C9D9CC"/></linearGradient>
+<linearGradient id="stoneDark" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B9CDBF"/><stop offset="1" stop-color="#93AE9C"/></linearGradient>
+<linearGradient id="col" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#C6D8CB"/><stop offset=".35" stop-color="#FFFFFF"/><stop offset=".7" stop-color="#E4EEE6"/><stop offset="1" stop-color="#AFC6B6"/></linearGradient>
+<linearGradient id="roof" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1F7A57"/><stop offset="1" stop-color="#0E5A3F"/></linearGradient>
+<linearGradient id="glass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1D5A4A"/><stop offset="1" stop-color="#0D3A30"/></linearGradient>
+<linearGradient id="lit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE9A8"/><stop offset="1" stop-color="#F2B95C"/></linearGradient>
+<linearGradient id="door" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF1C4"/><stop offset=".5" stop-color="#F7C96A"/><stop offset="1" stop-color="#E29F3B"/></linearGradient>
+<linearGradient id="step" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DCE8DF"/><stop offset="1" stop-color="#A9C0B0"/></linearGradient>
+<linearGradient id="road" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E3A33"/><stop offset="1" stop-color="#0F2420"/></linearGradient>
+<radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFE6A0" stop-opacity=".9"/><stop offset="1" stop-color="#FFE6A0" stop-opacity="0"/></radialGradient>
+<radialGradient id="doorGlow" cx=".5" cy=".7" r=".6"><stop offset="0" stop-color="#FFD98A" stop-opacity=".75"/><stop offset="1" stop-color="#FFD98A" stop-opacity="0"/></radialGradient>
+<g id="c">
+<rect x="0" y="0" width="34" height="14" fill="#F4F9F3"/>
+<rect x="4" y="14" width="26" height="330" fill="url(#col)"/>
+<g stroke="#B7CBBD" stroke-width="1.5" opacity=".8"><line x1="11" y1="18" x2="11" y2="340"/><line x1="17" y1="18" x2="17" y2="340"/><line x1="23" y1="18" x2="23" y2="340"/></g>
+<rect x="0" y="342" width="34" height="14" fill="#E3ECE5"/>
+</g>
+</defs>
+
+<!-- небо -->
+<rect width="800" height="1000" fill="url(#sky)"/>
+<g fill="#FFFFFF">
+<circle cx="90" cy="80" r="1.6" opacity=".8"/><circle cx="210" cy="140" r="1.2" opacity=".6"/><circle cx="330" cy="60" r="1.4" opacity=".7"/>
+<circle cx="470" cy="120" r="1.1" opacity=".6"/><circle cx="520" cy="40" r="1.5" opacity=".8"/><circle cx="700" cy="170" r="1.2" opacity=".6"/>
+<circle cx="150" cy="230" r="1" opacity=".5"/><circle cx="420" cy="210" r="1" opacity=".5"/><circle cx="760" cy="60" r="1.3" opacity=".7"/>
+</g>
+<circle cx="640" cy="120" r="70" fill="url(#moon)"/>
+<circle cx="640" cy="120" r="34" fill="#FFF6D6"/>
+<circle cx="628" cy="112" r="6" fill="#F3E3B0" opacity=".7"/><circle cx="652" cy="132" r="4" fill="#F3E3B0" opacity=".7"/>
+<g fill="#CDE9DA" opacity=".35">
+<ellipse cx="160" cy="300" rx="110" ry="22"/><ellipse cx="230" cy="285" rx="70" ry="20"/>
+<ellipse cx="610" cy="330" rx="120" ry="20"/><ellipse cx="540" cy="318" rx="60" ry="16"/>
+</g>
+
+<!-- деревья на заднем плане -->
+<g fill="#0B3F31">
+<circle cx="40" cy="700" r="70"/><circle cx="110" cy="660" r="60"/><circle cx="760" cy="690" r="70"/><circle cx="700" cy="650" r="55"/>
+</g>
+
+<!-- боковые крылья -->
+<g>
+<rect x="30" y="470" width="190" height="380" fill="url(#stoneDark)"/>
+<rect x="580" y="470" width="190" height="380" fill="url(#stoneDark)"/>
+<rect x="22" y="455" width="206" height="20" fill="#E3ECE5"/>
+<rect x="572" y="455" width="206" height="20" fill="#E3ECE5"/>
+<g>
+<rect x="55" y="505" width="40" height="70" rx="20" fill="url(#lit)"/><rect x="125" y="505" width="40" height="70" rx="20" fill="url(#glass)"/>
+<rect x="55" y="615" width="40" height="70" rx="20" fill="url(#glass)"/><rect x="125" y="615" width="40" height="70" rx="20" fill="url(#lit)"/>
+<rect x="55" y="725" width="40" height="70" rx="20" fill="url(#lit)"/><rect x="125" y="725" width="40" height="70" rx="20" fill="url(#glass)"/>
+<rect x="635" y="505" width="40" height="70" rx="20" fill="url(#glass)"/><rect x="705" y="505" width="40" height="70" rx="20" fill="url(#lit)"/>
+<rect x="635" y="615" width="40" height="70" rx="20" fill="url(#lit)"/><rect x="705" y="615" width="40" height="70" rx="20" fill="url(#glass)"/>
+</g>
+<!-- банкомат в правом крыле -->
+<rect x="640" y="720" width="96" height="120" rx="8" fill="#0E6B4A"/>
+<rect x="652" y="734" width="72" height="44" rx="4" fill="#9BF0C6"/>
+<rect x="660" y="742" width="40" height="5" rx="2" fill="#0E6B4A" opacity=".6"/><rect x="660" y="752" width="28" height="5" rx="2" fill="#0E6B4A" opacity=".6"/>
+<rect x="664" y="790" width="48" height="6" rx="3" fill="#03241A"/>
+<g fill="#CFEADB"><rect x="664" y="804" width="12" height="8" rx="2"/><rect x="682" y="804" width="12" height="8" rx="2"/><rect x="700" y="804" width="12" height="8" rx="2"/></g>
+<text x="688" y="716" font-family="Onest, Arial, sans-serif" font-size="14" font-weight="700" fill="#E3ECE5" text-anchor="middle" letter-spacing="2">24/7</text>
+</g>
+
+<!-- центральный корпус -->
+<rect x="190" y="430" width="420" height="420" fill="url(#stone)"/>
+<!-- антаблемент -->
+<rect x="170" y="392" width="460" height="44" fill="#F4F9F3"/>
+<rect x="170" y="430" width="460" height="10" fill="#C9D9CC"/>
+<text x="400" y="423" font-family="Onest, Arial, sans-serif" font-size="26" font-weight="800" fill="#0E5A3F" text-anchor="middle" letter-spacing="14">БАНК</text>
+<!-- фронтон -->
+<path d="M160 394 L400 270 L640 394 Z" fill="#F4F9F3"/>
+<path d="M200 384 L400 290 L600 384 Z" fill="url(#roof)"/>
+<!-- эмблема: монета с листком -->
+<circle cx="400" cy="350" r="28" fill="#F2C14E"/>
+<circle cx="400" cy="350" r="22" fill="none" stroke="#B9831F" stroke-width="2"/>
+<path d="M392 362 C392 344 402 336 414 336 C414 352 406 362 392 362 Z M392 362 L404 348" fill="#0E6B4A" stroke="#0E6B4A" stroke-width="2" stroke-linejoin="round"/>
+<!-- колонны -->
+<g>
+<use href="#c" x="214" y="440"/><use href="#c" x="280" y="440"/>
+<use href="#c" x="486" y="440"/><use href="#c" x="552" y="440"/>
+</g>
+<!-- окна между колоннами -->
+<rect x="256" y="500" width="16" height="230" rx="8" fill="url(#glass)" opacity=".8"/>
+<rect x="528" y="500" width="16" height="230" rx="8" fill="url(#glass)" opacity=".8"/>
+<!-- двери -->
+<ellipse cx="400" cy="800" rx="150" ry="110" fill="url(#doorGlow)"/>
+<path d="M336 830 V700 a64 64 0 0 1 128 0 V830 Z" fill="#0E5A3F"/>
+<path d="M346 830 V704 a54 54 0 0 1 108 0 V830 Z" fill="url(#door)"/>
+<line x1="400" y1="652" x2="400" y2="830" stroke="#C7882A" stroke-width="4"/>
+<path d="M346 704 a54 54 0 0 1 108 0" fill="none" stroke="#C7882A" stroke-width="4"/>
+<g stroke="#C7882A" stroke-width="2" opacity=".7"><line x1="346" y1="704" x2="454" y2="704"/><line x1="372" y1="660" x2="372" y2="704"/><line x1="428" y1="660" x2="428" y2="704"/></g>
+<circle cx="390" cy="770" r="4" fill="#8A5A12"/><circle cx="410" cy="770" r="4" fill="#8A5A12"/>
+<!-- ступени -->
+<rect x="150" y="840" width="500" height="16" fill="url(#step)"/>
+<rect x="130" y="856" width="540" height="16" fill="url(#step)"/>
+<rect x="110" y="872" width="580" height="18" fill="url(#step)"/>
+<!-- фонари -->
+<g>
+<circle cx="120" cy="770" r="40" fill="url(#glow)"/>
+<rect x="117" y="770" width="6" height="120" fill="#123A30"/>
+<rect x="110" y="756" width="20" height="22" rx="6" fill="#FFE6A0"/>
+</g>
+<!-- кусты у входа -->
+<g fill="#1F7A57"><circle cx="200" cy="836" r="22"/><circle cx="224" cy="842" r="16"/><circle cx="600" cy="836" r="22"/><circle cx="576" cy="842" r="16"/></g>
+<!-- тротуар и дорога -->
+<rect x="0" y="890" width="800" height="22" fill="#6E8F80"/>
+<rect x="0" y="912" width="800" height="88" fill="url(#road)"/>
+<g stroke="#E7F2EC" stroke-width="5" stroke-dasharray="44 30" opacity=".75"><line x1="0" y1="958" x2="800" y2="958"/></g>
+<!-- инкассаторская машинка -->
+<g transform="translate(470 916)">
+<rect x="0" y="16" width="150" height="38" rx="12" fill="#F2F7F3"/>
+<path d="M20 16 L36 0 H112 L132 16 Z" fill="#F2F7F3"/>
+<rect x="44" y="4" width="30" height="12" rx="2" fill="#1D5A4A"/><rect x="80" y="4" width="28" height="12" rx="2" fill="#1D5A4A"/>
+<rect x="0" y="30" width="150" height="8" fill="#13875C"/>
+<circle cx="34" cy="56" r="11" fill="#0F2420"/><circle cx="116" cy="56" r="11" fill="#0F2420"/>
+<circle cx="34" cy="56" r="4" fill="#CFE0D6"/><circle cx="116" cy="56" r="4" fill="#CFE0D6"/>
+</g>
+</svg>
