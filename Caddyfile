@@ -1,0 +1,4 @@
+opspacebank.ru, www.opspacebank.ru {
+    encode gzip
+    reverse_proxy frontend:80
+}
