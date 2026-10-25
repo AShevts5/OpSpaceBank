@@ -67,7 +67,7 @@ export function TopBar({ route }: { route: string }) {
             <b>
               OpSpace<span style={{ color: 'var(--accent)' }}>Bank</span>
             </b>
-            <small>Дискретная математика в бизнес-процессах</small>
+            <small>Цифровой помощник банка</small>
           </span>
         </button>
         <span className="pill hide-sm" title={online ? 'Есть связь с сервером' : 'Работаем автономно'}>
@@ -88,7 +88,7 @@ export function Footer() {
   return (
     <footer className="site-foot">
       <div className="site-foot__in">
-        <span>OpSpaceBank · учебный кейс по дискретной математике. Банк, клиенты и заявки вымышлены.</span>
+        <span>OpSpaceBank · цифровой помощник банка. Банк, клиенты и заявки вымышлены.</span>
         <span>Решения не являются финансовой рекомендацией.</span>
       </div>
     </footer>

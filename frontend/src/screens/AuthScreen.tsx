@@ -116,7 +116,7 @@ export default function AuthScreen({ initialChallenge, initialError, onSignedIn,
           <img src="/art/bank.svg" alt="Здание банка с колоннами" />
           <figcaption>
             <b>OpSpaceBank</b>
-            <span>Учебный банк, где каждое бизнес-правило — логическая функция. Войдите, чтобы попасть в операционный зал.</span>
+            <span>Кредиты, карты и персональные предложения — решение за пару минут. Войдите, чтобы попасть в операционный зал.</span>
           </figcaption>
         </figure>
       </div>
@@ -128,7 +128,6 @@ export default function AuthScreen({ initialChallenge, initialError, onSignedIn,
             <b>
               OpSpace<i>Bank</i>
             </b>
-            <span>Помощник банка: дискретная математика в бизнес-процессах</span>
           </div>
         </div>
 
@@ -217,8 +216,6 @@ export default function AuthScreen({ initialChallenge, initialError, onSignedIn,
             </button>
 
             {!online ? <p className="auth__info">Нет сети. Можно продолжить без входа — все задачи работают офлайн.</p> : null}
-
-            <p className="auth__small">Вход по паролю, через Яндекс ID (OAuth 2.0) и с двухфакторной аутентификацией (TOTP). Пароли хранятся только в виде хеша.</p>
 
             <div className="auth__links">
               {mode === 'login' ? (

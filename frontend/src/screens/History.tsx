@@ -4,12 +4,13 @@ import type { HistoryItem } from '../lib/api'
 import { useSession } from '../lib/session'
 import { clearLocalHistory, localHistory, pendingCount, syncHistory } from '../lib/store'
 
-const TASK_NAME: Record<string, string> = { task1: 'Кредитная заявка', task2: 'Сегмент «Премиум»', task3: 'Премиальная карта', custom: 'Конструктор' }
-const MODE_NAME: Record<string, string> = { solution: 'пошаговое решение', wizard: 'наводящие вопросы', check: 'проверка клиента', process_mining: 'Process Mining', custom: 'своя функция' }
+const TASK_NAME: Record<string, string> = { task1: 'Кредитная заявка', task2: 'Распродажа «Премиум»', task3: 'Премиальная карта', custom: 'Конструктор' }
+const MODE_NAME: Record<string, string> = { service: 'обращение клиента', solution: 'пошаговое решение', wizard: 'наводящие вопросы', check: 'проверка клиента', process_mining: 'Process Mining', custom: 'своя функция' }
 
 function summary(h: HistoryItem): string {
   const r = h.result ?? {}
   if (h.mode === 'wizard') return `${h.score} из ${h.total} верно`
+  if (h.task === 'task2' && 'premium' in r) return r.premium ? 'в премиуме' : 'не в премиуме'
   if ('approved' in r) return r.approved ? 'одобрено' : 'отказ'
   if ('premium' in r && typeof r.premium === 'number') return r.premium ? 'в премиуме' : 'не в премиуме'
   if ('minimal' in r) return `F = ${r.minimal}`

@@ -135,3 +135,12 @@ npm run cap:android            # открыть в Android Studio → Run / Buil
 ## Логотип
 
 Знак OpSpaceBank — «планета-банк»: тёмно-зелёный диск с фасадом банка (фронтон, три колонны, ступени), вокруг — орбита с золотым спутником. Надпись: «OpSpace» жирным + «Bank» акцентным зелёным. Все варианты лежат в `brand/` (SVG и PNG): вертикальный и горизонтальный логотип для светлого и тёмного фона, знак, иконка приложения (скруглённая, maskable для Android и упрощённая для 16–32 px). `brand/logo.py` пересобирает SVG.
+
+## Деплой на https://opspacebank.ru
+
+1. DNS: A-записи `@` и `www` → IP сервера.
+2. На сервере (Ubuntu): `curl -fsSL https://get.docker.com | sh`, затем `git clone https://github.com/AShevts5/OpSpaceBank.git && cd OpSpaceBank`.
+3. `echo "DB_PASSWORD=$(openssl rand -hex 16)" > .env` и `cp backend/.env.production.example backend/.env` (впишите JWT_SECRET и ключи Яндекса).
+4. `docker compose -f docker-compose.prod.yml up -d --build` — Caddy сам получит и будет продлевать SSL-сертификат Let's Encrypt.
+5. В приложении Яндекс ID: Redirect URI `https://opspacebank.ru/api/v1/auth/yandex/callback`.
+6. Обновление: `git pull && docker compose -f docker-compose.prod.yml up -d --build`.

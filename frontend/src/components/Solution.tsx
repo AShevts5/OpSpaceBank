@@ -215,3 +215,21 @@ export function Legend({ vars }: { vars: { key: string; label: string }[] }) {
     </div>
   )
 }
+
+/** Отчёт по решению: все шаги сразу; highlightRow подсвечивает в таблицах строку клиента. */
+export function StepList({ steps, renderBlock, highlightRow }: { steps: Step[]; renderBlock?: (s: Step) => ReactNode; highlightRow?: number }) {
+  return (
+    <ol className="steps">
+      {steps.map((s, i) => {
+        const step = s.table && highlightRow !== undefined ? { ...s, table: { ...s.table, highlight: [highlightRow] } } : s
+        return (
+          <li key={s.title} className="card step">
+            <StepInner step={step} index={i}>
+              {s.block && renderBlock ? renderBlock(s) : null}
+            </StepInner>
+          </li>
+        )
+      })}
+    </ol>
+  )
+}

@@ -28,7 +28,7 @@ export default function Hall({ arriving = false }: { arriving?: boolean }) {
           <h1 id="hall-title">Вы в холле банка</h1>
           <p className="muted">
             {hello}
-            {user?.name ? `, ${user.name}` : status === 'guest' ? ', гость' : ''}! Выберите окно — в каждом разбираем одну бизнес-задачу: подробный алгоритм, наводящие вопросы и итоговый ответ.
+            {user?.name ? `, ${user.name}` : status === 'guest' ? ', гость' : ''}! Выберите окно с нужной услугой, ответьте на несколько вопросов — и система банка сразу примет решение.
           </p>
           <button type="button" className="hall__guard" onClick={() => openAssistant()}>
             <ShieldIcon width={18} height={18} /> Спросить консультанта

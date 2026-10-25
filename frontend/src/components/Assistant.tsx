@@ -23,7 +23,7 @@ export function openAssistant(prompt?: string) {
 
 const GREETING: Msg = {
   role: 'assistant',
-  content: 'Здравствуйте! Я AI-консультант OpSpaceBank. Отвечу на вопросы по задачам, булевой алгебре, СДНФ/СКНФ, методу Квайна — и вообще на любые ваши вопросы.',
+  content: 'Здравствуйте! Я AI-консультант OpSpaceBank. Подскажу по кредиту, премиальной карте и закрытой распродаже, объясню любое решение системы — и отвечу на другие ваши вопросы.',
 }
 
 export default function Assistant({ context }: { context: string }) {

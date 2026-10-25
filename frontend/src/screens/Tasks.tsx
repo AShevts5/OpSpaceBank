@@ -1,8 +1,9 @@
 import { useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { openAssistant } from '../components/Assistant'
-import { Legend, QMChart, QMStages, StepByStep } from '../components/Solution'
-import { Checker, Wizard } from '../components/Wizard'
+import { AnswersSummary, Interview, Verdict } from '../components/Interview'
+import type { Answer, InterviewQuestion } from '../components/Interview'
+import { QMChart, QMStages, StepList } from '../components/Solution'
 import { saveResult } from '../lib/store'
 import {
   solveTask1,
@@ -12,89 +13,143 @@ import {
   task1Decide,
   task2Classify,
   task3Decide,
-  task3Questions,
   parseLogCsv,
   TASK1_EVENT_LOG,
-  TASK1_QUESTIONS,
-  TASK1_VARS,
   TASK2_CLIENTS,
-  TASK2_QUESTIONS,
-  TASK2_VARS,
   TASK3_VARIANTS,
-  TASK3_VARS,
 } from '../logic/tasks'
 import type { Client, LogRow, Step, TaskId, Variant } from '../logic/tasks'
 
-type Tab = 'solution' | 'wizard' | 'check' | 'extra'
+interface Decision {
+  ok: boolean
+  title: string
+  message: ReactNode
+  /** номер строки таблицы истинности, соответствующей ответам клиента */
+  row: number
+  bits: Record<string, number>
+  result: Record<string, unknown>
+}
 
-function TaskShell({
+/**
+ * Страница услуги: клиент отвечает на вопросы → система выносит решение →
+ * ниже отчёт, как решение получено (логическая модель, таблица истинности и т. д.).
+ */
+function ServicePage({
   id,
   num,
   title,
-  condition,
-  vars,
-  tabs,
-  extraLabel,
-  top,
+  lead,
+  questions,
+  decide,
+  report,
+  extra,
+  labels,
 }: {
   id: TaskId
   num: number
   title: string
-  condition: ReactNode
-  vars: { key: string; label: string }[]
-  tabs: Record<Tab, ReactNode | null>
-  extraLabel?: string
-  top?: ReactNode
+  lead: string
+  questions: InterviewQuestion[]
+  decide: (a: Record<string, Answer>) => Decision
+  report: (d: Decision, a: Record<string, Answer>) => ReactNode
+  extra?: ReactNode
+  labels: Record<string, string>
 }) {
-  const [tab, setTab] = useState<Tab>('solution')
-  const labels: [Tab, string][] = [
-    ['solution', 'Пошаговое решение'],
-    ['wizard', 'Наводящие вопросы'],
-    ['check', 'Проверить клиента'],
-  ]
-  if (tabs.extra && extraLabel) labels.push(['extra', extraLabel])
+  const [answers, setAnswers] = useState<Record<string, Answer> | null>(null)
+  const [round, setRound] = useState(0)
+  const decision = answers ? decide(answers) : null
+
+  const finish = (a: Record<string, Answer>) => {
+    const d = decide(a)
+    setAnswers(a)
+    saveResult({ task: id, mode: 'service', input: a as Record<string, unknown>, result: { approved: d.ok, ...d.result } })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
     <div className="wrap page">
       <div className="page__head">
-        <p className="eyebrow">Окно {num} · задача {num}</p>
+        <p className="eyebrow">Окно {num}</p>
         <h1>{title}</h1>
+        <p className="muted" style={{ maxWidth: '70ch' }}>
+          {lead}
+        </p>
       </div>
-      <div className="card p-5 grid gap-3">
-        <p className="eyebrow">Условие</p>
-        <div className="grid gap-2 muted">{condition}</div>
-        <div>
-          <button type="button" className="auth__link" onClick={() => openAssistant(`Объясни простыми словами задачу ${num}: «${title}»`)}>
-            Не понятно условие? Спросить консультанта
-          </button>
-        </div>
-      </div>
-      <Legend vars={vars} />
-      {top}
-      <div className="seg" role="tablist" aria-label="Режим">
-        {labels.map(([k, l]) => (
-          <button key={k} type="button" role="tab" aria-selected={tab === k} aria-pressed={tab === k} onClick={() => setTab(k)}>
-            {l}
-          </button>
-        ))}
-      </div>
-      <div key={tab + id}>{tabs[tab]}</div>
+
+      {!answers || !decision ? (
+        <Interview key={round} questions={questions} onComplete={finish} />
+      ) : (
+        <>
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] items-start">
+            <div className="grid gap-3">
+              <Verdict ok={decision.ok} title={decision.title}>
+                {decision.message}
+              </Verdict>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  className="btn btn--primary"
+                  onClick={() => {
+                    setAnswers(null)
+                    setRound((r) => r + 1)
+                  }}
+                >
+                  Новая заявка
+                </button>
+                <button type="button" className="btn" onClick={() => openAssistant(`Объясни решение по услуге «${title}»: ${decision.title}. Что можно сделать, чтобы результат был лучше?`)}>
+                  Спросить консультанта
+                </button>
+              </div>
+            </div>
+            <div className="card p-4 grid gap-2">
+              <p className="eyebrow">Ваши ответы</p>
+              <AnswersSummary questions={questions} answers={answers} />
+            </div>
+          </div>
+
+          <div className="report-head">
+            <div className="grid gap-1">
+              <p className="eyebrow">Отчёт системы</p>
+              <h2>Как было принято решение</h2>
+            </div>
+            <span className="tag">ваш случай — строка m{decision.row} в таблице истинности</span>
+          </div>
+          <div className="legend">
+            {Object.entries(decision.bits).map(([k, v]) => (
+              <div key={k}>
+                <b>{k}</b>
+                <span>
+                  {labels[k]}: <b style={{ display: 'inline', width: 'auto', height: 'auto', background: 'none', color: v ? 'var(--ok)' : 'var(--miss)' }}>{v ? 'да (1)' : 'нет (0)'}</b>
+                </span>
+              </div>
+            ))}
+          </div>
+          {report(decision, answers)}
+        </>
+      )}
+      {extra}
     </div>
   )
 }
 
-function Answer({ title = 'Ответ', children }: { title?: string; children: ReactNode }) {
+function Task(props: { title: string; children: ReactNode }) {
   return (
-    <section className="card answer" aria-label="Ответ">
-      <p className="eyebrow" style={{ color: 'var(--accent)' }}>
-        Итог
-      </p>
-      <h2>{title}</h2>
-      {children}
-    </section>
+    <details className="card p-5">
+      <summary className="cursor-pointer font-display font-bold">{props.title}</summary>
+      <div className="grid gap-2 muted mt-3">{props.children}</div>
+    </details>
   )
 }
 
+const yesNo = (v: Answer) => (v ? 1 : 0)
+
 // ================================================================ задача 1
+const Q1: InterviewQuestion[] = [
+  { key: 'A', kind: 'yesno', text: 'У вас высокий кредитный рейтинг?', hint: 'Рейтинг можно бесплатно узнать в бюро кредитных историй через Госуслуги.' },
+  { key: 'B', kind: 'yesno', text: 'Вы можете подтвердить доход официальной справкой?', hint: 'Например, справкой о доходах или выпиской из Социального фонда.' },
+  { key: 'C', kind: 'yesno', text: 'Есть ли у вас поручитель с хорошей кредитной историей?' },
+]
+
 function ProcessLog({ rows }: { rows: ReturnType<typeof task1CheckLog>['rows'] }) {
   return (
     <div className="scroll-x">
@@ -193,53 +248,6 @@ function ProcessMining() {
   )
 }
 
-export function Task1() {
-  const steps = useMemo(solveTask1, [])
-  const log = useMemo(() => task1CheckLog(), [])
-  const answer = (
-    <Answer title="F = A ∧ (B ∨ C)">
-      <p>Заявка одобряется, если у клиента высокий кредитный рейтинг и при этом либо подтверждён доход, либо есть надёжный поручитель.</p>
-      <div className="formula">(A∧B) ∨ (A∧¬B∧C) = A∧(B∨C)</div>
-      <p className="muted">
-        В «Навигатор BI» вместо трёх сложных проверок — две. Process Mining в демо-журнале нашёл нарушения: <b>{log.violations.join(', ')}</b>, упущенные заявки: <b>{log.missed.join(', ')}</b>.
-      </p>
-    </Answer>
-  )
-  const block = (s: Step) => (s.block === 'processLog' ? <ProcessLog rows={log.rows} /> : null)
-  return (
-    <TaskShell
-      id="task1"
-      num={1}
-      title="Автоодобрение кредитной заявки"
-      vars={TASK1_VARS}
-      condition={
-        <>
-          <p>В системе «Навигатор BI» проектируется модуль автоматического одобрения кредитной заявки. Решение зависит от трёх условий A, B, C.</p>
-          <p>
-            Бизнес-правило: «Заявка одобряется, если у клиента высокий рейтинг <b>И</b> подтверждён доход, <b>ЛИБО</b> если у клиента высокий рейтинг, но не подтверждён доход официальной справкой, но при этом есть надёжный поручитель».
-          </p>
-          <p>Нужно: 1) составить логическую функцию F(A,B,C); 2) минимизировать её законами алгебры логики; 3) проверить с помощью Process Mining, выполняется ли правило в реальных процессах (поиск нарушений).</p>
-        </>
-      }
-      extraLabel="Process Mining"
-      tabs={{
-        solution: <StepByStep steps={steps} renderBlock={block} answer={answer} onFinish={() => saveResult({ task: 'task1', mode: 'solution', result: { minimal: 'A∧(B∨C)' } })} />,
-        wizard: <Wizard questions={TASK1_QUESTIONS} final={answer} onDone={(score, total) => saveResult({ task: 'task1', mode: 'wizard', score, total })} />,
-        check: (
-          <Checker
-            vars={TASK1_VARS}
-            formula="F = A∧(B∨C)"
-            decide={([a, b, c]) => ({ ...task1Decide(a, b, c), minterm: a * 4 + b * 2 + c })}
-            onCheck={(bits, approved) => saveResult({ task: 'task1', mode: 'check', input: { A: bits[0], B: bits[1], C: bits[2] }, result: { approved } })}
-          />
-        ),
-        extra: <ProcessMining />,
-      }}
-    />
-  )
-}
-
-// ================================================================ задача 2
 function ClientsTable({ clients }: { clients: Client[] }) {
   const rows = clients.map(task2Classify)
   return (
@@ -325,119 +333,6 @@ function ClientLab() {
   )
 }
 
-export function Task2() {
-  const steps = useMemo(solveTask2, [])
-  const answer = (
-    <Answer title="F = A ∧ (B ∨ C) ∧ ¬D">
-      <p>
-        В сегмент «Премиум» попадают <b>Анна, Игорь и Елена</b>. Олег — нет: у него всего 5 покупок.
-      </p>
-      <p className="muted">Главная фишка задачи — правильно расставить приоритеты (скобки). Без скобок условие «больше 10 покупок» относилось бы только к среднему чеку, и все участники программы лояльности (даже с одной покупкой) попали бы в премиум. Благодаря скобкам сегмент выделен абсолютно корректно.</p>
-      <div className="formula">¬(B∨C) = ¬B∧¬C → avg_check &lt;= 5000 AND loyalty = FALSE</div>
-    </Answer>
-  )
-  const block = (s: Step) => (s.block === 'clients' ? <ClientsTable clients={TASK2_CLIENTS} /> : null)
-  return (
-    <TaskShell
-      id="task2"
-      num={2}
-      title="Сегмент «Премиум» для закрытой распродажи"
-      vars={TASK2_VARS}
-      condition={
-        <>
-          <p>Вы — BI-аналитик в интернет-магазине. Маркетологи хотят выделить сегмент «Премиум-клиентов» для закрытой распродажи.</p>
-          <p>
-            Бизнес-правило: клиент считается премиальным, если он совершил более 10 покупок <b>И</b> его средний чек выше 5000 ₽ <b>ИЛИ</b> он участвует в программе лояльности. Однако если клиент находится в чёрном списке, он ни при каких условиях не должен попасть в этот сегмент.
-          </p>
-        </>
-      }
-      extraLabel="Свои клиенты"
-      tabs={{
-        solution: <StepByStep steps={steps} renderBlock={block} answer={answer} onFinish={() => saveResult({ task: 'task2', mode: 'solution', result: { premium: ['Анна', 'Игорь', 'Елена'] } })} />,
-        wizard: <Wizard questions={TASK2_QUESTIONS} final={answer} onDone={(score, total) => saveResult({ task: 'task2', mode: 'wizard', score, total })} />,
-        check: (
-          <Checker
-            vars={TASK2_VARS}
-            formula="F = A∧(B∨C)∧¬D"
-            decide={([a, b, c, d]) => {
-              const r = task2Classify({ name: '', purchases: a ? 11 : 0, avg_check: b ? 5001 : 0, loyalty: !!c, blacklist: !!d })
-              return { approved: !!r.premium, reason: (r.premium ? 'Клиент попадает в «Премиум»: ' : 'Не попадает: ') + r.reason, minterm: a * 8 + b * 4 + c * 2 + d }
-            }}
-            onCheck={(bits, approved) => saveResult({ task: 'task2', mode: 'check', input: { A: bits[0], B: bits[1], C: bits[2], D: bits[3] }, result: { premium: approved } })}
-          />
-        ),
-        extra: <ClientLab />,
-      }}
-    />
-  )
-}
-
-// ================================================================ задача 3
-export function Task3() {
-  const [variant, setVariant] = useState<Variant>('strict')
-  const sol = useMemo(() => solveTask3(variant), [variant])
-  const questions = useMemo(() => task3Questions(variant), [variant])
-  const block = (s: Step) => (s.block === 'qmStages' ? <QMStages qm={sol.qm} /> : s.block === 'qmChart' ? <QMChart qm={sol.qm} /> : null)
-  const answer = (
-    <Answer title={`F = ${sol.qm.minimal_dnf}`}>
-      <div className="grid gap-2">
-        <p className="eyebrow">СДНФ</p>
-        <div className="formula">{sol.qm.sdnf}</div>
-        <p className="eyebrow">СКНФ</p>
-        <div className="formula">{sol.qm.sknf}</div>
-      </div>
-      <p className="muted">
-        Простые импликанты: {sol.qm.prime_implicants.map((p) => p.term).join(', ')}. Существенные: {sol.qm.essential.map((p) => p.term).join(', ')}.
-        {sol.qm.redundant.length ? ` Лишняя: ${sol.qm.redundant.map((p) => p.term).join(', ')}.` : ' Лишних нет.'}
-      </p>
-      <p>{variant === 'strict' ? 'Без положительной кредитной истории — отказ; с ней достаточно высокого дохода или депозита: F = Y∧(X∨Z).' : 'При высоком доходе решает кредитная история, без него — наличие депозита (мультиплексор по X).'}</p>
-    </Answer>
-  )
-  return (
-    <TaskShell
-      id="task3"
-      num={3}
-      title="Автоматизация одобрения кредитного лимита"
-      vars={TASK3_VARS}
-      condition={
-        <>
-          <p>Финтех-компания разрабатывает микросервис для автоматизации решения по выдаче премиальных кредитных карт. Система анализирует три фактора: X — высокий доход, Y — положительная кредитная история, Z — наличие депозита в банке.</p>
-          <p>Положительное решение выдаётся только если: 1) высокий доход И положительная кредитная история (депозит не важен); 2) у клиента нет высокого дохода, но есть идеальная кредитная история И крупный депозит, «даже если кредитная история подкачала».</p>
-          <p>Задача: построить таблицу Квайна, найти СДНФ и СКНФ, бизнес-интерпретировать процесс и результаты для IT-отдела.</p>
-          <p className="law">Второе правило противоречиво («идеальная история» и «даже если история подкачала»), поэтому задача решена в двух прочтениях — переключайте вариант ниже.</p>
-        </>
-      }
-      top={
-        <div className="grid gap-2">
-          <p className="eyebrow">Прочтение правила 2</p>
-          <div className="seg" role="group" aria-label="Вариант">
-            {(Object.keys(TASK3_VARIANTS) as Variant[]).map((v) => (
-              <button key={v} type="button" aria-pressed={variant === v} onClick={() => setVariant(v)}>
-                {TASK3_VARIANTS[v].title}
-              </button>
-            ))}
-          </div>
-        </div>
-      }
-      extraLabel="Сравнить варианты"
-      tabs={{
-        solution: <StepByStep key={variant} steps={sol.steps} renderBlock={block} answer={answer} onFinish={() => saveResult({ task: 'task3', mode: 'solution', variant, result: { minimal: sol.qm.minimal_dnf } })} />,
-        wizard: <Wizard key={variant} questions={questions} final={answer} onDone={(score, total) => saveResult({ task: 'task3', mode: 'wizard', variant, score, total })} />,
-        check: (
-          <Checker
-            key={variant}
-            vars={TASK3_VARS}
-            formula={`F = ${sol.qm.minimal_dnf}`}
-            decide={([x, y, z]) => task3Decide(variant, x, y, z)}
-            onCheck={(bits, approved) => saveResult({ task: 'task3', mode: 'check', variant, input: { X: bits[0], Y: bits[1], Z: bits[2] }, result: { approved } })}
-          />
-        ),
-        extra: <CompareVariants />,
-      }}
-    />
-  )
-}
-
 function CompareVariants() {
   const a = solveTask3('strict')
   const b = solveTask3('deposit')
@@ -492,5 +387,186 @@ function CompareVariants() {
         Варианты расходятся только на наборе <b>m1</b> (без высокого дохода, плохая история, есть депозит): во втором прочтении такого клиента одобряем «даже если кредитная история подкачала». Перед внедрением это стоит согласовать с риск-менеджерами.
       </p>
     </div>
+  )
+}
+
+export function Task1() {
+  const steps = useMemo(solveTask1, [])
+  const log = useMemo(() => task1CheckLog(), [])
+  const block = (s: Step) => (s.block === 'processLog' ? <ProcessLog rows={log.rows} /> : null)
+  return (
+    <ServicePage
+      id="task1"
+      labels={{ A: 'Высокий кредитный рейтинг', B: 'Доход подтверждён', C: 'Есть поручитель' }}
+      num={1}
+      title="Кредитная заявка"
+      lead="Ответьте на три вопроса — система «Навигатор BI» сразу примет решение по заявке на кредит."
+      questions={Q1}
+      decide={(a) => {
+        const [A, B, C] = [yesNo(a.A), yesNo(a.B), yesNo(a.C)]
+        const d = task1Decide(A, B, C)
+        return {
+          ok: d.approved,
+          title: d.approved ? 'Кредит одобрен' : 'В кредите отказано',
+          message: (
+            <>
+              <p>{d.reason}</p>
+              {!d.approved && A ? <p className="text-sm muted">Принесите справку о доходах или найдите поручителя — тогда заявка будет одобрена.</p> : null}
+              {!A ? <p className="text-sm muted">Без высокого кредитного рейтинга автоматическое одобрение невозможно: заявку может рассмотреть сотрудник банка.</p> : null}
+            </>
+          ),
+          row: A * 4 + B * 2 + C,
+          bits: { A, B, C },
+          result: { formula: 'A∧(B∨C)' },
+        }
+      }}
+      report={(d) => (
+        <>
+          <Task title="Бизнес-правило банка">
+            <p>A — кредитный рейтинг высокий, B — доход подтверждён официальной справкой, C — есть поручитель с хорошей историей.</p>
+            <p>«Заявка одобряется, если у клиента высокий рейтинг И подтверждён доход, ЛИБО если рейтинг высокий, доход не подтверждён, но есть надёжный поручитель».</p>
+          </Task>
+          <StepList steps={steps} renderBlock={block} highlightRow={d.row} />
+        </>
+      )}
+      extra={
+        <details className="card p-5">
+          <summary className="cursor-pointer font-display font-bold">Для сотрудников: проверка журнала заявок (Process Mining)</summary>
+          <div className="mt-4">
+            <ProcessMining />
+          </div>
+        </details>
+      }
+    />
+  )
+}
+
+// ================================================================ задача 2
+const Q2: InterviewQuestion[] = [
+  { key: 'purchases', kind: 'number', text: 'Сколько покупок вы совершили в нашем магазине?', placeholder: '12', format: (v) => `${v}` },
+  { key: 'avg_check', kind: 'number', text: 'Какой у вас средний чек?', unit: '₽', placeholder: '6000' },
+  { key: 'loyalty', kind: 'yesno', text: 'Вы участвуете в программе лояльности?' },
+  { key: 'blacklist', kind: 'yesno', text: 'Ваш аккаунт заблокирован за нарушение правил магазина?', hint: 'Такие клиенты находятся в «чёрном списке».' },
+]
+
+export function Task2() {
+  const steps = useMemo(solveTask2, [])
+  return (
+    <ServicePage
+      id="task2"
+      labels={{ A: 'Больше 10 покупок', B: 'Средний чек > 5000 ₽', C: 'Программа лояльности', D: 'Чёрный список' }}
+      num={2}
+      title="Закрытая распродажа «Премиум»"
+      lead="Ответьте на четыре вопроса — система проверит, входите ли вы в сегмент премиум-клиентов и получите ли доступ к закрытой распродаже."
+      questions={Q2}
+      decide={(a) => {
+        const client: Client = { name: 'Вы', purchases: Number(a.purchases), avg_check: Number(a.avg_check), loyalty: !!a.loyalty, blacklist: !!a.blacklist }
+        const r = task2Classify(client)
+        return {
+          ok: !!r.premium,
+          title: r.premium ? 'Вы — премиум-клиент' : 'Пока не премиум',
+          message: (
+            <>
+              <p>{r.premium ? 'Доступ к закрытой распродаже открыт: ' : 'Причина: '}{r.reason}.</p>
+              {!r.premium && !r.D && !r.A ? <p className="text-sm muted">Совершите больше 10 покупок — и при высоком чеке или участии в программе лояльности вы попадёте в сегмент.</p> : null}
+              {!r.premium && !r.D && r.A ? <p className="text-sm muted">Вступите в программу лояльности — это бесплатно и сразу откроет доступ.</p> : null}
+            </>
+          ),
+          row: r.A * 8 + r.B * 4 + r.C * 2 + r.D,
+          bits: { A: r.A, B: r.B, C: r.C, D: r.D },
+          result: { premium: r.premium },
+        }
+      }}
+      report={(d, a) => {
+        const me: Client = { name: 'Вы', purchases: Number(a.purchases), avg_check: Number(a.avg_check), loyalty: !!a.loyalty, blacklist: !!a.blacklist }
+        return (
+          <>
+            <Task title="Бизнес-правило сегмента">
+              <p>A — больше 10 покупок, B — средний чек выше 5000 ₽, C — участие в программе лояльности, D — клиент в чёрном списке.</p>
+              <p>«Клиент премиальный, если совершил более 10 покупок И его средний чек выше 5000 ₽ ИЛИ он участвует в программе лояльности. Клиент из чёрного списка в сегмент не попадает ни при каких условиях».</p>
+            </Task>
+            <StepList steps={steps} highlightRow={d.row} renderBlock={(s) => (s.block === 'clients' ? <ClientsTable clients={[me, ...TASK2_CLIENTS]} /> : null)} />
+          </>
+        )
+      }}
+      extra={
+        <details className="card p-5">
+          <summary className="cursor-pointer font-display font-bold">Для маркетологов: разметка списка клиентов</summary>
+          <div className="mt-4">
+            <ClientLab />
+          </div>
+        </details>
+      }
+    />
+  )
+}
+
+// ================================================================ задача 3
+const Q3: InterviewQuestion[] = [
+  { key: 'X', kind: 'yesno', text: 'У вас высокий доход?' },
+  { key: 'Y', kind: 'yesno', text: 'У вас положительная кредитная история?', hint: 'Нет просрочек и действующих долгов.' },
+  { key: 'Z', kind: 'yesno', text: 'Есть ли у вас депозит в нашем банке?' },
+]
+
+function Task3Report({ row }: { row: number }) {
+  const [variant, setVariant] = useState<Variant>('strict')
+  const sol = useMemo(() => solveTask3(variant), [variant])
+  const block = (s: Step) => (s.block === 'qmStages' ? <QMStages qm={sol.qm} /> : s.block === 'qmChart' ? <QMChart qm={sol.qm} /> : null)
+  return (
+    <>
+      <Task title="Бизнес-правила выдачи карты">
+        <p>X — высокий доход, Y — положительная кредитная история, Z — депозит в банке.</p>
+        <p>Одобряем, если: 1) высокий доход И положительная кредитная история (депозит не важен); 2) нет высокого дохода, но есть идеальная кредитная история И крупный депозит, «даже если кредитная история подкачала».</p>
+        <p>Второе правило сформулировано противоречиво, поэтому отчёт построен для двух прочтений.</p>
+      </Task>
+      <div className="seg" role="group" aria-label="Прочтение правила 2">
+        {(Object.keys(TASK3_VARIANTS) as Variant[]).map((v) => (
+          <button key={v} type="button" aria-pressed={variant === v} onClick={() => setVariant(v)}>
+            {TASK3_VARIANTS[v].title}
+          </button>
+        ))}
+      </div>
+      <StepList key={variant} steps={sol.steps} renderBlock={block} highlightRow={row} />
+      <details className="card p-5">
+        <summary className="cursor-pointer font-display font-bold">Сравнение двух прочтений правила</summary>
+        <div className="mt-4">
+          <CompareVariants />
+        </div>
+      </details>
+    </>
+  )
+}
+
+export function Task3() {
+  return (
+    <ServicePage
+      id="task3"
+      labels={{ X: 'Высокий доход', Y: 'Положительная история', Z: 'Депозит в банке' }}
+      num={3}
+      title="Премиальная кредитная карта"
+      lead="Ответьте на три вопроса — микросервис банка сразу решит, можно ли выдать вам премиальную кредитную карту."
+      questions={Q3}
+      decide={(a) => {
+        const [X, Y, Z] = [yesNo(a.X), yesNo(a.Y), yesNo(a.Z)]
+        const main = task3Decide('strict', X, Y, Z)
+        const soft = task3Decide('deposit', X, Y, Z)
+        return {
+          ok: main.approved,
+          title: main.approved ? 'Карта одобрена' : 'В выдаче карты отказано',
+          message: (
+            <>
+              <p>{main.reason}</p>
+              {soft.approved !== main.approved ? (
+                <p className="text-sm muted">При мягком прочтении правила 2 (депозит без учёта кредитной истории) решение было бы положительным — заявку стоит передать риск-менеджеру.</p>
+              ) : null}
+            </>
+          ),
+          row: main.minterm,
+          bits: { X, Y, Z },
+          result: { minterm: main.minterm, soft: soft.approved },
+        }
+      }}
+      report={(d) => <Task3Report row={d.row} />}
+    />
   )
 }
